@@ -52,7 +52,6 @@ class JwtAuthenticationFilter(
         try {
             filterChain.doFilter(request, response)
         } catch (ex: IOException) {
-            logger.error("Ошибка аутентификации: {}", ex.message)
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("Ошибка аутентификации: ${ex.message}")
             throw RuntimeException(ex)

@@ -1,6 +1,8 @@
 package com.example.carkotlin.utils
 
 
+import com.example.carkotlin.models.User
+import com.example.carkotlin.repository.UserRepository
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -24,13 +26,11 @@ class JwtUtility(
         val user: User? = userRepository.findByUsername(username)
             ?: throw IllegalArgumentException("Пользователь не найден: $username")
 
-        // При желании можно сделать отдельную логику,
-        // если нужен разный срок жизни для Access/Refresh-токена.
         val expirationTime = ACCESS_TOKEN_VALIDITY
 
         return Jwts.builder()
             .setSubject(username)
-            .claim("role", user.role?.name)
+            .claim("role", user?.role?.name)
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationTime))
             .signWith(key, SignatureAlgorithm.HS256)
